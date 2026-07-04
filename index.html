@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Serverless Visitor Counter</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+    linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+}
+
+
+.container{
+
+    width:420px;
+    padding:40px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    text-align:center;
+    color:white;
+    box-shadow:0 25px 50px rgba(0,0,0,0.4);
+
+}
+
+
+.logo{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+
+h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+
+.subtitle{
+    opacity:0.8;
+    margin-bottom:30px;
+}
+
+
+.counter-box{
+
+    background:white;
+    color:#203a43;
+    padding:25px;
+    border-radius:20px;
+    margin:25px 0;
+
+}
+
+
+.counter{
+
+    font-size:70px;
+    font-weight:bold;
+
+}
+
+
+.status{
+
+    margin-top:20px;
+    display:inline-block;
+    padding:10px 20px;
+    background:#00c853;
+    border-radius:30px;
+
+}
+
+
+.footer{
+
+    margin-top:25px;
+    font-size:14px;
+    opacity:0.7;
+
+}
+
+
+button{
+
+    margin-top:20px;
+    padding:12px 30px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    background:#ffffff;
+    color:#203a43;
+    font-weight:bold;
+
+}
+
+
+button:hover{
+
+    transform:scale(1.05);
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+
+
+<h1>Visitor Counter</h1>
+
+
+<p class="subtitle">
+AWS Serverless Cloud Project
+</p>
+
+
+
+<div class="counter-box">
+
+<p>Total Visitors</p>
+
+<div class="counter" id="count">
+0
+</div>
+
+
+</div>
+
+
+
+<div class="status">
+  System Online
+</div>
+
+
+<br>
+
+
+<button>
+Refresh Count
+</button>
+
+
+
+<div class="footer">
+
+Powered by AWS Lambda + DynamoDB + API Gateway
+
+</div>
+
+
+
+</div>
+<script>
+const API_URL = "https://tash3nxc06.execute-api.eu-north-1.amazonaws.com/visitor";
+
+// 🔑 create unique ID for each browser
+let userId = localStorage.getItem("userId");
+
+if (!userId) {
+    userId = crypto.randomUUID();
+    localStorage.setItem("userId", userId);
+}
+
+async function loadCount() {
+    try {
+        const url = `${API_URL}?userId=${userId}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        document.getElementById("count").innerText = data.count;
+
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
+
+// load when page opens
+loadCount();
+</script>
+
+</body>
+</html>
